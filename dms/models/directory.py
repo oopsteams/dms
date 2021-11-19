@@ -413,6 +413,7 @@ class DmsDirectory(models.Model):
 
     def _compute_count_total_directories(self):
         for record in self:
+            # print('compute_count_total_directories record:{}'.format(record))
             count = self.search_count([("id", "child_of", record.id)])
             count = count - 1 if count > 0 else 0
             record.count_total_directories = count

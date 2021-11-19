@@ -30,7 +30,7 @@
             <tree string="Categories" decoration-muted="(not active)">
                 <field name="active" />
                 <field name="name" />
-                <field name="parent_id" />
+                <field name="parent_name" />
                 <field name="tag_ids" />
             </tree>
         </field>

@@ -30,7 +30,8 @@ class Category(models.Model):
         default=True,
         help="The active field allows you to hide the category without removing it.",
     )
-    complete_name = fields.Char(compute="_compute_complete_name", store=True)
+    complete_name = fields.Char(compute="_compute_complete_name", store=True, translate=True)
+    parent_name = fields.Char(compute="_compute_parent_name", string="Parent Category", store=False, translate=True)
     parent_id = fields.Many2one(
         comodel_name="dms.category",
         string="Parent Category",
@@ -85,6 +86,16 @@ class Category(models.Model):
     # ----------------------------------------------------------
     # Read
     # ----------------------------------------------------------
+    @api.depends("name", "parent_id.name")
+    def _compute_parent_name(self):
+        for category in self:
+            if category.parent_id:
+                category.parent_name = "{} / {}".format(
+                    category.parent_id.parent_name,
+                    category.parent_id.name,
+                )
+            else:
+                category.parent_name = ""
 
     @api.depends("name", "parent_id.complete_name")
     def _compute_complete_name(self):
